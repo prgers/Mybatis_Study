@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="idCard">
+
+    <sql id="sqlListALl">
+        SELECT
+            ic.*,
+            p.name
+        FROM id_card ic
+        JOIN person p ON p.id = ic.person_id
+    </sql>
+    
+    <resultMap id="rmList" type="IdCard">
+        <id property="id" column="id"/>
+        <result property="no" column="no"/>
+        <result property="address" column="address"/>
+        <association property="person" javaType="Person">
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <select id="list" resultMap="rmList">
+        <include refid="sqlListALl"/>
+    </select>
+
+    <select id="get" parameterType="int" resultMap="rmList">
+        <include refid="sqlListALl" /> WHERE p.id = #{id}
+    </select>
+
+</mapper>
